@@ -26,7 +26,7 @@ HTML = """
         <input type="text" name="mesaj" placeholder="Mesajını yaz" required>
         <button type="submit">Gönder</button>
     </form>
-    <h3>Ziyaretçiler:</h3>
+    <h3>Misafir Defteri</h3>
     <ul>
         {% for z in isimler %}
             <li><b>{{ z["isim"] }}</b>: {{ z["mesaj"] }}</li>
