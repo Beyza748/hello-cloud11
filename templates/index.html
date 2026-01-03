@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mikro Hizmetli Selam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f7;
+            text-align: center;
+            padding-top: 60px;
+        }
+        input {
+            padding: 10px;
+            margin: 5px;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #6fb35e;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: white;
+            margin: 10px auto;
+            padding: 10px;
+            width: 400px;
+            border-radius: 5px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Mikro Hizmetli Selam!</h1>
+<p>Adını ve mesajını yaz</p>
+
+<!-- ❌ FORM YOK → SAYFA YENİLENMEZ -->
+<input id="name" placeholder="Adını yaz">
+<input id="message" placeholder="Mesajını yaz">
+
+<!-- 🔴 type="button" ÇOK ÖNEMLİ -->
+<button type="button" onclick="sendMessage()">Gönder</button>
+
+<h2>Misafir Defteri</h2>
+
+<!-- 👇 MESAJLAR TAM OLARAK BURANIN ALTINA EKLENİR -->
+<ul id="messageList"></ul>
+
+<script>
+const API_URL = "https://API-SERVICE-ADI.onrender.com/messages";
+
+function sendMessage() {
+    const name = document.getElementById("name").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    if (!name || !message) {
+        alert("Ad ve mesaj boş olamaz");
+        return;
+    }
+
+    fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, message })
+    })
+    .then(() => {
+        // inputları temizle
+        document.getElementById("name").value = "";
+        document.getElementById("message").value = "";
+
+        // 👇 AYNI SAYFADA, MİSAFİR DEFTERİNİN ALTINA EKLER
+        loadMessages();
+    });
+}
+
+function loadMessages() {
+    fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+            const list = document.getElementById("messageList");
+            list.innerHTML = "";
+            data.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = item.name + " : " + item.message;
+                list.ap
